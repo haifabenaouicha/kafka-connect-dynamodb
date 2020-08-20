@@ -29,16 +29,12 @@ public class AwsClients {
 
     }
 
-    public static AWSResourceGroupsTaggingAPI buildAWSResourceGroupsTaggingAPIClient(String awsRegion,
-                                                                                     String awsAccessKeyID,
-                                                                                     String awsSecretKey) {
+    public static AWSResourceGroupsTaggingAPI buildAWSResourceGroupsTaggingAPIClient() {
         ClientConfiguration clientConfig = new ClientConfiguration();
         clientConfig.setUseThrottleRetries(true);
 
         return AWSResourceGroupsTaggingAPIClientBuilder.standard()
-                                                       .withCredentials(getCredentials(awsAccessKeyID, awsSecretKey))
-                                                       .withClientConfiguration(clientConfig)
-                                                       .withRegion(awsRegion)
+                                                       .withRegion("eu-west-3")
                                                        .build();
     }
 

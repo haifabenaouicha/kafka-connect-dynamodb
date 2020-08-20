@@ -1,6 +1,8 @@
 package com.trustpilot.connector.dynamodb;
 
+import com.amazonaws.client.builder.AwsSyncClientBuilder;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.resourcegroupstaggingapi.AWSResourceGroupsTaggingAPI;
 import com.trustpilot.connector.dynamodb.aws.DynamoDBTablesProvider;
 import com.trustpilot.connector.dynamodb.aws.AwsClients;
@@ -53,18 +55,15 @@ public class DynamoDBSourceConnector extends SourceConnector {
         DynamoDBSourceConnectorConfig config = new DynamoDBSourceConnectorConfig(configProperties);
 
         AWSResourceGroupsTaggingAPI groupsTaggingAPIClient =
-                AwsClients.buildAWSResourceGroupsTaggingAPIClient(config.getAwsRegion(),
-                                                                  config.getAwsAccessKeyId(),
-                                                                  config.getAwsSecretKey());
+                AwsClients.buildAWSResourceGroupsTaggingAPIClient();
 
-        AmazonDynamoDB dynamoDBClient = AwsClients.buildDynamoDbClient(config.getAwsRegion(),
-                                                                       config.getAwsAccessKeyId(),
-                                                                       config.getAwsSecretKey());
+        AmazonDynamoDBClientBuilder dynamoDBClient = AmazonDynamoDBClientBuilder.standard();
+       AmazonDynamoDB  a = dynamoDBClient.withRegion("eu-west-3").build();
 
         if (tablesProvider == null) {
             tablesProvider = new DynamoDBTablesProvider(
                     groupsTaggingAPIClient,
-                    dynamoDBClient,
+                    a,
                     config.getSrcDynamoDBIngestionTagKey(),
                     config.getSrcDynamoDBEnvTagKey(),
                     config.getSrcDynamoDBEnvTagValue());
